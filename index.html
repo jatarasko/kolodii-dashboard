@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kolodii OS Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    .header .subtitle { opacity: 0.9; font-size: 1rem; }
+    .header .updated { opacity: 0.7; font-size: 0.85rem; margin-top: 0.5rem; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Project Cards */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1rem;
+    }
+
+    .project-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #94a3b8;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .project-card.status-active { border-left-color: #22c55e; }
+    .project-card.status-paused { border-left-color: #f59e0b; }
+    .project-card.status-completed { border-left-color: #3b82f6; }
+    .project-card.status-cancelled { border-left-color: #ef4444; }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .project-header h3 { font-size: 1rem; font-weight: 600; flex: 1; }
+
+    .badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+    .badge {
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .project-desc {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 0.75rem;
+    }
+
+    .progress-section {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-text {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #475569;
+      min-width: 35px;
+      text-align: right;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .meta-item { display: flex; align-items: center; gap: 0.25rem; }
+
+    /* Jobs */
+    .jobs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .job-item {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .job-name { font-weight: 600; flex: 1; min-width: 200px; }
+    .job-schedule { color: #64748b; font-size: 0.85rem; }
+    .job-times { display: flex; flex-direction: column; font-size: 0.75rem; color: #94a3b8; }
+
+    /* Sessions */
+    .sessions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .session-item {
+      background: white;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+      gap: 0.5rem;
+    }
+
+    .session-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .session-title { font-size: 0.85rem; font-weight: 500; }
+    .session-meta { font-size: 0.7rem; color: #94a3b8; }
+    .session-date { font-size: 0.75rem; color: #94a3b8; white-space: nowrap; }
+
+    .empty { color: #94a3b8; font-style: italic; padding: 1rem; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      color: #94a3b8;
+      font-size: 0.8rem;
+    }
+
+    .footer a { color: #667eea; text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .header h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏋️ Kolodii OS Dashboard</h1>
+  <div class="subtitle">Операційна система Kolodii Fitness</div>
+  <div class="updated">Оновлено: 13.06.2026 22:41 | Автоматичне оновлення щодня</div>
+</div>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">9</div>
+      <div class="stat-label">Всього проєктів</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#22c55e">8</div>
+      <div class="stat-label">Активних</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#3b82f6">0</div>
+      <div class="stat-label">Завершено</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#ef4444">1</div>
+      <div class="stat-label">Високий вплив</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">35%</div>
+      <div class="stat-label">Середній прогрес</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">5/5</div>
+      <div class="stat-label">Активних задач</div>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="section">
+    <h2 class="section-title">📊 Проєкти</h2>
+    <div class="projects-grid">
+      
+        <div class="project-card status-active">
+          <div class="project-header">
+            <h3>🟢 Online Fitness Support</h3>
+            <div class="badges">
+              <span class="badge" style="background:#22c55e">Активний</span>
+              <span class="badge" style="background:#ef4444">Високий</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:70%; background:#22c55e"></div>
+            </div>
+            <span class="progress-text">70%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+        <div class="project-card status-active">
+          <div class="project-header">
+            <h3>🟢 Kolodii OS Automation</h3>
+            <div class="badges">
+              <span class="badge" style="background:#22c55e">Активний</span>
+              <span class="badge" style="background:#f59e0b">Середній</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:35%; background:#22c55e"></div>
+            </div>
+            <span class="progress-text">35%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+        <div class="project-card status-active">
+          <div class="project-header">
+            <h3>🟢 Telegram Course Bot</h3>
+            <div class="badges">
+              <span class="badge" style="background:#22c55e">Активний</span>
+              <span class="badge" style="background:#f59e0b">Середній</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:40%; background:#22c55e"></div>
+            </div>
+            <span class="progress-text">40%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+        <div class="project-card status-active">
+          <div class="project-header">
+            <h3>🟢 Content System</h3>
+            <div class="badges">
+              <span class="badge" style="background:#22c55e">Активний</span>
+              <span class="badge" style="background:#f59e0b">Середній</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:10%; background:#22c55e"></div>
+            </div>
+            <span class="progress-text">10%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+        <div class="project-card status-active">
+          <div class="project-header">
+            <h3>🟢 Telegram Healthy Plate Course</h3>
+            <div class="badges">
+              <span class="badge" style="background:#22c55e">Активний</span>
+              <span class="badge" style="background:#f59e0b">Середній</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:60%; background:#22c55e"></div>
+            </div>
+            <span class="progress-text">60%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+        <div class="project-card status-active">
+          <div class="project-header">
+            <h3>🟢 Recipe Book</h3>
+            <div class="badges">
+              <span class="badge" style="background:#22c55e">Активний</span>
+              <span class="badge" style="background:#f59e0b">Середній</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:50%; background:#22c55e"></div>
+            </div>
+            <span class="progress-text">50%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+        <div class="project-card status-active">
+          <div class="project-header">
+            <h3>🟢 Corporate Lectures</h3>
+            <div class="badges">
+              <span class="badge" style="background:#22c55e">Активний</span>
+              <span class="badge" style="background:#f59e0b">Середній</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:20%; background:#22c55e"></div>
+            </div>
+            <span class="progress-text">20%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+        <div class="project-card status-active">
+          <div class="project-header">
+            <h3>🟢 SMM Monitoring System</h3>
+            <div class="badges">
+              <span class="badge" style="background:#22c55e">Активний</span>
+              <span class="badge" style="background:#f59e0b">Середній</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:5%; background:#22c55e"></div>
+            </div>
+            <span class="progress-text">5%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+        <div class="project-card status-paused">
+          <div class="project-header">
+            <h3>🟡 YouTube / Podcast</h3>
+            <div class="badges">
+              <span class="badge" style="background:#f59e0b">На паузі</span>
+              <span class="badge" style="background:#22c55e">Низький</span>
+            </div>
+          </div>
+          <p class="project-desc"></p>
+          <div class="progress-section">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:30%; background:#f59e0b"></div>
+            </div>
+            <span class="progress-text">30%</span>
+          </div>
+          <div class="project-meta">
+            
+            
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Cron Jobs -->
+  <div class="section">
+    <h2 class="section-title">⏰ Заплановані задачі (Cron)</h2>
+    <div class="jobs-list">
+      
+        <div class="job-item">
+          <div class="job-name">Відео-ідеї: Hermes Agent Use Cases</div>
+          <div class="job-schedule">⏰ 0 9 * * *</div>
+          <div class="job-times">
+            <span>Останній запуск: —</span>
+            <span>Наступний: 2026-06-14 09:00</span>
+          </div>
+          <span class="badge" style="background:#22c55e">Активний</span>
+        </div>
+        <div class="job-item">
+          <div class="job-name">SMM: Research Agent</div>
+          <div class="job-schedule">⏰ 0 6 * * *</div>
+          <div class="job-times">
+            <span>Останній запуск: —</span>
+            <span>Наступний: 2026-06-14 06:00</span>
+          </div>
+          <span class="badge" style="background:#22c55e">Активний</span>
+        </div>
+        <div class="job-item">
+          <div class="job-name">SMM: Strategy Agent</div>
+          <div class="job-schedule">⏰ 20 6 * * *</div>
+          <div class="job-times">
+            <span>Останній запуск: —</span>
+            <span>Наступний: 2026-06-14 06:20</span>
+          </div>
+          <span class="badge" style="background:#22c55e">Активний</span>
+        </div>
+        <div class="job-item">
+          <div class="job-name">SMM: Writer Agent</div>
+          <div class="job-schedule">⏰ 40 6 * * *</div>
+          <div class="job-times">
+            <span>Останній запуск: —</span>
+            <span>Наступний: 2026-06-14 06:40</span>
+          </div>
+          <span class="badge" style="background:#22c55e">Активний</span>
+        </div>
+        <div class="job-item">
+          <div class="job-name">SMM: Chief of Staff — Compile & Deliver</div>
+          <div class="job-schedule">⏰ 0 7 * * *</div>
+          <div class="job-times">
+            <span>Останній запуск: —</span>
+            <span>Наступний: 2026-06-14 07:00</span>
+          </div>
+          <span class="badge" style="background:#22c55e">Активний</span>
+        </div>
+    </div>
+  </div>
+
+  <!-- Recent Sessions -->
+  <div class="section">
+    <h2 class="section-title">💬 Останні сесії</h2>
+    <div class="sessions-list">
+      
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 20260613_224047_4e1b52</span>
+            <span class="session-meta">tui · 1 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 22:40</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 Дашборд прогресу</span>
+            <span class="session-meta">tui · 6 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 16:30</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 20260613_162624_9aca67</span>
+            <span class="session-meta">tui · 8 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 16:26</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 20260613_161550_179853</span>
+            <span class="session-meta">tui · 5 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 16:15</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 20260613_161150_d1c9c8</span>
+            <span class="session-meta">tui · 6 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 16:11</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 20260613_160404_0875b5</span>
+            <span class="session-meta">tui · 26 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 16:04</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">⏰ SMM Morning Plan — Daily Pipeline · Jun 13 16:12</span>
+            <span class="session-meta">cron · 63 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 15:58</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 навчання по відео</span>
+            <span class="session-meta">tui · 14 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 15:40</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 SMM Monitoring System Specification</span>
+            <span class="session-meta">tui · 157 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 15:14</span>
+        </div>
+        <div class="session-item">
+          <div class="session-info">
+            <span class="session-title">💻 Telegram Bot Connection Issue</span>
+            <span class="session-meta">tui · 97 повідомлень</span>
+          </div>
+          <span class="session-date">13.06.2026 14:36</span>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>Kolodii OS Dashboard · Автоматично згенеровано · <a href="https://github.com/kolodiifitness/kolodii-dashboard">GitHub</a></p>
+  <p style="margin-top:0.5rem">Всім фітнес. Бач, як добре. 💪</p>
+</div>
+
+</body>
+</html>

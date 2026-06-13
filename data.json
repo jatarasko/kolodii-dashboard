@@ -1,0 +1,196 @@
+{
+  "generated": "2026-06-13T22:41:11.116434",
+  "stats": {
+    "total_projects": 9,
+    "active": 8,
+    "paused": 1,
+    "completed": 0,
+    "high_impact": 1,
+    "avg_progress": 35,
+    "active_jobs": 5,
+    "total_jobs": 5
+  },
+  "projects": [
+    {
+      "name": "Online Fitness Support",
+      "status": "active",
+      "impact": "high",
+      "progress": 70
+    },
+    {
+      "name": "Kolodii OS Automation",
+      "status": "active",
+      "impact": "medium",
+      "progress": 35
+    },
+    {
+      "name": "Telegram Course Bot",
+      "status": "active",
+      "impact": "medium",
+      "progress": 40
+    },
+    {
+      "name": "Content System",
+      "status": "active",
+      "impact": "medium",
+      "progress": 10
+    },
+    {
+      "name": "Telegram Healthy Plate Course",
+      "status": "active",
+      "impact": "medium",
+      "progress": 60
+    },
+    {
+      "name": "Recipe Book",
+      "status": "active",
+      "impact": "medium",
+      "progress": 50
+    },
+    {
+      "name": "Corporate Lectures",
+      "status": "active",
+      "impact": "medium",
+      "progress": 20
+    },
+    {
+      "name": "SMM Monitoring System",
+      "status": "active",
+      "impact": "medium",
+      "progress": 5
+    },
+    {
+      "name": "YouTube / Podcast",
+      "status": "paused",
+      "impact": "low",
+      "progress": 30
+    }
+  ],
+  "jobs": [
+    {
+      "enabled": true,
+      "state": "active",
+      "name": "Відео-ідеї: Hermes Agent Use Cases",
+      "schedule": "0 9 * * *",
+      "next_run": "2026-06-14T09:00:00+03:00",
+      "deliver": "telegram",
+      "last_run": ""
+    },
+    {
+      "enabled": true,
+      "state": "active",
+      "name": "SMM: Research Agent",
+      "schedule": "0 6 * * *",
+      "next_run": "2026-06-14T06:00:00+03:00",
+      "deliver": "local",
+      "last_run": ""
+    },
+    {
+      "enabled": true,
+      "state": "active",
+      "name": "SMM: Strategy Agent",
+      "schedule": "20 6 * * *",
+      "next_run": "2026-06-14T06:20:00+03:00",
+      "deliver": "local",
+      "last_run": ""
+    },
+    {
+      "enabled": true,
+      "state": "active",
+      "name": "SMM: Writer Agent",
+      "schedule": "40 6 * * *",
+      "next_run": "2026-06-14T06:40:00+03:00",
+      "deliver": "local",
+      "last_run": ""
+    },
+    {
+      "enabled": true,
+      "state": "active",
+      "name": "SMM: Chief of Staff — Compile & Deliver",
+      "schedule": "0 7 * * *",
+      "next_run": "2026-06-14T07:00:00+03:00",
+      "deliver": "telegram",
+      "last_run": ""
+    }
+  ],
+  "sessions": [
+    {
+      "title": "20260613_224047_4e1b52",
+      "date": "13.06.2026 22:40",
+      "source": "tui",
+      "messages": "1"
+    },
+    {
+      "title": "Дашборд прогресу",
+      "date": "13.06.2026 16:30",
+      "source": "tui",
+      "messages": "6"
+    },
+    {
+      "title": "20260613_162624_9aca67",
+      "date": "13.06.2026 16:26",
+      "source": "tui",
+      "messages": "8"
+    },
+    {
+      "title": "20260613_161550_179853",
+      "date": "13.06.2026 16:15",
+      "source": "tui",
+      "messages": "5"
+    },
+    {
+      "title": "20260613_161150_d1c9c8",
+      "date": "13.06.2026 16:11",
+      "source": "tui",
+      "messages": "6"
+    },
+    {
+      "title": "20260613_160404_0875b5",
+      "date": "13.06.2026 16:04",
+      "source": "tui",
+      "messages": "26"
+    },
+    {
+      "title": "SMM Morning Plan — Daily Pipeline · Jun 13 16:12",
+      "date": "13.06.2026 15:58",
+      "source": "cron",
+      "messages": "63"
+    },
+    {
+      "title": "навчання по відео",
+      "date": "13.06.2026 15:40",
+      "source": "tui",
+      "messages": "14"
+    },
+    {
+      "title": "SMM Monitoring System Specification",
+      "date": "13.06.2026 15:14",
+      "source": "tui",
+      "messages": "157"
+    },
+    {
+      "title": "Telegram Bot Connection Issue",
+      "date": "13.06.2026 14:36",
+      "source": "tui",
+      "messages": "97"
+    },
+    {
+      "title": "організація шефа",
+      "date": "10.06.2026 00:06",
+      "source": "tui",
+      "messages": "202"
+    },
+    {
+      "title": "20260609_190622_ae6e61a5",
+      "date": "09.06.2026 19:06",
+      "source": "telegram",
+      "messages": "398"
+    },
+    {
+      "title": "Creating KolodiiOS Directory",
+      "date": "03.06.2026 22:57",
+      "source": "cli",
+      "messages": "251"
+    }
+  ]
+}
