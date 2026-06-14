@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-13T22:41:11.116434",
+  "generated": "2026-06-14T09:25:55.949004",
   "stats": {
     "total_projects": 9,
     "active": 8,
@@ -7,63 +7,72 @@
     "completed": 0,
     "high_impact": 1,
     "avg_progress": 35,
-    "active_jobs": 5,
-    "total_jobs": 5
+    "active_jobs": 7,
+    "total_jobs": 7
   },
   "projects": [
     {
       "name": "Online Fitness Support",
       "status": "active",
       "impact": "high",
-      "progress": 70
+      "progress": 70,
+      "next_step": "Systematize check-in and progress tracking workflows"
     },
     {
       "name": "Kolodii OS Automation",
       "status": "active",
       "impact": "medium",
-      "progress": 35
+      "progress": 35,
+      "next_step": "Complete first operational workflow (client onboarding or check-in automation)"
     },
     {
       "name": "Telegram Course Bot",
       "status": "active",
       "impact": "medium",
-      "progress": 40
+      "progress": 40,
+      "next_step": "Complete bot logic and integrate with course content"
     },
     {
       "name": "Content System",
       "status": "active",
       "impact": "medium",
-      "progress": 10
+      "progress": 10,
+      "next_step": "Define brand voice, content pillars, and first month of content"
     },
     {
       "name": "Telegram Healthy Plate Course",
       "status": "active",
       "impact": "medium",
-      "progress": 60
+      "progress": 60,
+      "next_step": "Launch next cohort or open evergreen enrollment"
     },
     {
       "name": "Recipe Book",
       "status": "active",
       "impact": "medium",
-      "progress": 50
+      "progress": 50,
+      "next_step": "Finalize content, design, and publish"
     },
     {
       "name": "Corporate Lectures",
       "status": "active",
       "impact": "medium",
-      "progress": 20
+      "progress": 20,
+      "next_step": "Secure first corporate client or pilot lecture"
     },
     {
       "name": "SMM Monitoring System",
       "status": "active",
       "impact": "medium",
-      "progress": 5
+      "progress": 5,
+      "next_step": "Phase 1 complete: manual prototype validated with Taras feedback"
     },
     {
       "name": "YouTube / Podcast",
       "status": "paused",
       "impact": "low",
-      "progress": 30
+      "progress": 30,
+      "next_step": "Establish consistent publishing cadence (1x/week minimum)"
     }
   ],
   "jobs": [
@@ -72,125 +81,60 @@
       "state": "active",
       "name": "Відео-ідеї: Hermes Agent Use Cases",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-14T09:00:00+03:00",
-      "deliver": "telegram",
-      "last_run": ""
+      "next_run": "2026-06-15T09:00:00+03:00",
+      "deliver": "telegram"
     },
     {
       "enabled": true,
       "state": "active",
       "name": "SMM: Research Agent",
-      "schedule": "0 6 * * *",
-      "next_run": "2026-06-14T06:00:00+03:00",
-      "deliver": "local",
-      "last_run": ""
+      "schedule": "0 9 * * *",
+      "next_run": "2026-06-15T09:00:00+03:00",
+      "deliver": "local"
     },
     {
       "enabled": true,
       "state": "active",
       "name": "SMM: Strategy Agent",
-      "schedule": "20 6 * * *",
-      "next_run": "2026-06-14T06:20:00+03:00",
-      "deliver": "local",
-      "last_run": ""
+      "schedule": "20 9 * * *",
+      "next_run": "2026-06-15T09:20:00+03:00",
+      "deliver": "local"
     },
     {
       "enabled": true,
       "state": "active",
       "name": "SMM: Writer Agent",
-      "schedule": "40 6 * * *",
-      "next_run": "2026-06-14T06:40:00+03:00",
-      "deliver": "local",
-      "last_run": ""
+      "schedule": "40 9 * * *",
+      "next_run": "2026-06-14T09:40:00+03:00",
+      "deliver": "local"
     },
     {
       "enabled": true,
       "state": "active",
       "name": "SMM: Chief of Staff — Compile & Deliver",
-      "schedule": "0 7 * * *",
-      "next_run": "2026-06-14T07:00:00+03:00",
-      "deliver": "telegram",
-      "last_run": ""
+      "schedule": "0 10 * * *",
+      "next_run": "2026-06-14T10:00:00+03:00",
+      "deliver": "telegram"
+    },
+    {
+      "enabled": true,
+      "state": "active",
+      "name": "Dashboard: Daily Update & Telegram",
+      "schedule": "0 8 * * *",
+      "next_run": "2026-06-15T08:00:00+03:00",
+      "deliver": "local"
+    },
+    {
+      "enabled": true,
+      "state": "active",
+      "name": "Щоденний пріоритет Тараса",
+      "schedule": "0 9 * * *",
+      "next_run": "2026-06-15T09:00:00+03:00",
+      "deliver": "origin"
     }
   ],
-  "sessions": [
-    {
-      "title": "20260613_224047_4e1b52",
-      "date": "13.06.2026 22:40",
-      "source": "tui",
-      "messages": "1"
-    },
-    {
-      "title": "Дашборд прогресу",
-      "date": "13.06.2026 16:30",
-      "source": "tui",
-      "messages": "6"
-    },
-    {
-      "title": "20260613_162624_9aca67",
-      "date": "13.06.2026 16:26",
-      "source": "tui",
-      "messages": "8"
-    },
-    {
-      "title": "20260613_161550_179853",
-      "date": "13.06.2026 16:15",
-      "source": "tui",
-      "messages": "5"
-    },
-    {
-      "title": "20260613_161150_d1c9c8",
-      "date": "13.06.2026 16:11",
-      "source": "tui",
-      "messages": "6"
-    },
-    {
-      "title": "20260613_160404_0875b5",
-      "date": "13.06.2026 16:04",
-      "source": "tui",
-      "messages": "26"
-    },
-    {
-      "title": "SMM Morning Plan — Daily Pipeline · Jun 13 16:12",
-      "date": "13.06.2026 15:58",
-      "source": "cron",
-      "messages": "63"
-    },
-    {
-      "title": "навчання по відео",
-      "date": "13.06.2026 15:40",
-      "source": "tui",
-      "messages": "14"
-    },
-    {
-      "title": "SMM Monitoring System Specification",
-      "date": "13.06.2026 15:14",
-      "source": "tui",
-      "messages": "157"
-    },
-    {
-      "title": "Telegram Bot Connection Issue",
-      "date": "13.06.2026 14:36",
-      "source": "tui",
-      "messages": "97"
-    },
-    {
-      "title": "організація шефа",
-      "date": "10.06.2026 00:06",
-      "source": "tui",
-      "messages": "202"
-    },
-    {
-      "title": "20260609_190622_ae6e61a5",
-      "date": "09.06.2026 19:06",
-      "source": "telegram",
-      "messages": "398"
-    },
-    {
-      "title": "Creating KolodiiOS Directory",
-      "date": "03.06.2026 22:57",
-      "source": "cli",
-      "messages": "251"
-    }
-  ]
+  "todays_tasks": {
+    "main_goal": "Online Fitness Support",
+    "additional_count": 5
+  }
 }

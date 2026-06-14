@@ -437,7 +437,16 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
         </div>
       </div>"""
 
-    return f"""<!DOCTYPE html>
+    # Prepare flat variables for template (avoids f-string dict access issues)
+    sp = stats['total_projects']
+    sa = stats['active']
+    sc = stats['completed']
+    sh = stats['high_impact']
+    sap = stats['avg_progress']
+    saj = stats['active_jobs']
+    stj = stats['total_jobs']
+
+    tpl = """<!DOCTYPE html>
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
@@ -451,8 +460,6 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
       color: #1e293b;
       line-height: 1.5;
     }}
-
-    /* Header */
     .header {{
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
@@ -462,220 +469,78 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
     .header h1 {{ font-size: 1.75rem; margin-bottom: 0.3rem; }}
     .header .subtitle {{ opacity: 0.85; font-size: 0.9rem; }}
     .header .updated {{ opacity: 0.65; font-size: 0.75rem; margin-top: 0.4rem; }}
-
-    .container {{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 1.25rem;
-    }
-
-    /* Stats */
+    .container {{ max-width: 1100px; margin: 0 auto; padding: 1.25rem; }}
     .stats-grid {{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem; margin-bottom: 1.5rem;
     }}
     .stat-card {{
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
+      background: white; border-radius: 10px; padding: 1rem; text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
     }}
     .stat-number {{ font-size: 1.75rem; font-weight: 700; color: #667eea; }}
     .stat-label {{ font-size: 0.7rem; color: #64748b; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; }}
-
-    /* Section */
     .section {{ margin-bottom: 1.5rem; }}
     .section-title {{
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: #475569;
+      font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.4rem; color: #475569;
     }}
-
-    /* Today's Tasks */
     .tasks-container {{
-      background: white;
-      border-radius: 12px;
-      padding: 1.25rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
+      background: white; border-radius: 12px; padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
     }}
     .task-main {{
       background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
-      border: 1px solid #667eea30;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 0.75rem;
+      border: 1px solid #667eea30; border-radius: 10px; padding: 1rem; margin-bottom: 0.75rem;
     }}
     .task-label {{ font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: #667eea; font-weight: 600; }}
     .task-name {{ font-size: 1.1rem; font-weight: 600; margin: 0.3rem 0; }}
     .task-name.empty {{ color: #94a3b8; font-weight: 400; }}
     .task-step {{ font-size: 0.85rem; color: #475569; margin-bottom: 0.5rem; }}
-    .task-progress, .task-item-progress {{
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }}
+    .task-progress, .task-item-progress {{ display: flex; align-items: center; gap: 0.5rem; }}
     .task-item-progress span {{ font-size: 0.7rem; color: #94a3b8; min-width: 30px; }}
-
     .task-divider {{ height: 1px; background: #e2e8f0; margin: 0.75rem 0; }}
-
-    .task-item {{
-      padding: 0.6rem 0;
-      border-bottom: 1px solid #f1f5f9;
-    }}
+    .task-item {{ padding: 0.6rem 0; border-bottom: 1px solid #f1f5f9; }}
     .task-item:last-child {{ border-bottom: none; }}
     .task-item-name {{ font-weight: 600; font-size: 0.9rem; }}
     .task-item-step {{ font-size: 0.8rem; color: #64748b; margin: 0.2rem 0 0.4rem; }}
-
-    /* Project Cards */
-    .projects-grid {{
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 0.75rem;
-    }}
+    .projects-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0.75rem; }}
     .project-card {{
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
-      border-left: 3px solid #94a3b8;
-      transition: box-shadow 0.15s;
+      background: white; border-radius: 10px; padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
+      border-left: 3px solid #94a3b8; transition: box-shadow 0.15s;
     }}
     .project-card:hover {{ box-shadow: 0 4px 12px rgba(0,0,0,0.12); }}
     .project-card.status-active {{ border-left-color: #22c55e; }}
     .project-card.status-paused {{ border-left-color: #f59e0b; }}
     .project-card.status-completed {{ border-left-color: #3b82f6; }}
     .project-card.status-cancelled {{ border-left-color: #ef4444; }}
-
-    .project-header {{
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.5rem;
-      gap: 0.5rem;
-    }}
+    .project-header {{ display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; gap: 0.5rem; }}
     .project-header h3 {{ font-size: 0.9rem; font-weight: 600; flex: 1; }}
     .badges {{ display: flex; gap: 0.3rem; flex-shrink: 0; }}
-    .badge {{
-      color: white;
-      padding: 0.15rem 0.5rem;
-      border-radius: 12px;
-      font-size: 0.6rem;
-      font-weight: 600;
-      white-space: nowrap;
-    }}
-
-    .progress-section {{
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 0.4rem;
-    }}
-    .progress-bar-bg {{
-      flex: 1;
-      height: 6px;
-      background: #e2e8f0;
-      border-radius: 3px;
-      overflow: hidden;
-    }}
+    .badge {{ color: white; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.6rem; font-weight: 600; white-space: nowrap; }}
+    .progress-section {{ display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }}
+    .progress-bar-bg {{ flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }}
     .progress-bar-bg.small {{ height: 4px; }}
-    .progress-bar-fill {{
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.4s ease;
-    }}
+    .progress-bar-fill {{ height: 100%; border-radius: 3px; transition: width 0.4s ease; }}
     .progress-text {{ font-size: 0.7rem; font-weight: 600; color: #475569; min-width: 30px; text-align: right; }}
-
-    .next-step {{
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-top: 0.4rem;
-      padding: 0.4rem 0.6rem;
-      background: #f8fafc;
-      border-radius: 6px;
-      border-left: 2px solid #667eea;
-    }}
-
-    /* Cron Compact */
-    .cron-list {{
-      background: white;
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
-    }}
-    .cron-compact {{
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 0;
-      border-bottom: 1px solid #f8fafc;
-      font-size: 0.8rem;
-    }}
+    .next-step {{ font-size: 0.75rem; color: #64748b; margin-top: 0.4rem; padding: 0.4rem 0.6rem; background: #f8fafc; border-radius: 6px; border-left: 2px solid #667eea; }}
+    .cron-list {{ background: white; border-radius: 10px; padding: 0.75rem 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }}
+    .cron-compact {{ display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0; border-bottom: 1px solid #f8fafc; font-size: 0.8rem; }}
     .cron-compact:last-child {{ border-bottom: none; }}
-    .cron-dot {{
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }}
+    .cron-dot {{ width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }}
     .cron-name {{ font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
     .cron-schedule {{ color: #94a3b8; font-size: 0.7rem; flex-shrink: 0; }}
     .cron-next {{ color: #64748b; font-size: 0.7rem; flex-shrink: 0; }}
-
-    /* Sessions */
-    .sessions-list {{
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }}
-    .session-card {{
-      background: white;
-      border-radius: 10px;
-      padding: 0.85rem 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
-    }}
-    .session-top {{
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 0.25rem;
-    }}
+    .sessions-list {{ display: flex; flex-direction: column; gap: 0.5rem; }}
+    .session-card {{ background: white; border-radius: 10px; padding: 0.85rem 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }}
+    .session-top {{ display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.25rem; }}
     .session-title {{ font-size: 0.85rem; font-weight: 600; flex: 1; }}
     .session-date {{ font-size: 0.7rem; color: #94a3b8; white-space: nowrap; flex-shrink: 0; }}
-    .session-summary {{
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-bottom: 0.35rem;
-      line-height: 1.4;
-    }}
-    .session-meta {{
-      display: flex;
-      gap: 0.75rem;
-      font-size: 0.65rem;
-      color: #94a3b8;
-    }}
-
+    .session-summary {{ font-size: 0.75rem; color: #64748b; margin-bottom: 0.35rem; line-height: 1.4; }}
+    .session-meta {{ display: flex; gap: 0.75rem; font-size: 0.65rem; color: #94a3b8; }}
     .empty {{ color: #94a3b8; font-style: italic; padding: 0.75rem; font-size: 0.85rem; }}
-
-    /* Footer */
-    .footer {{
-      text-align: center;
-      padding: 1.5rem;
-      color: #94a3b8;
-      font-size: 0.75rem;
-    }}
-
+    .footer {{ text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.75rem; }}
     @media (max-width: 600px) {{
       .projects-grid {{ grid-template-columns: 1fr; }}
       .stats-grid {{ grid-template-columns: repeat(3, 1fr); }}
@@ -686,68 +551,71 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
   </style>
 </head>
 <body>
-
 <div class="header">
   <h1>🏋️ Kolodii OS</h1>
   <div class="subtitle">Операційна система Kolodii Fitness</div>
-  <div class="updated">Оновлено: {now}</div>
+  <div class="updated">Оновлено: __NOW__</div>
 </div>
-
 <div class="container">
-
-  <!-- Stats -->
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-number">{stats['total_projects']}</div><div class="stat-label">Проєктів</div></div>
-    <div class="stat-card"><div class="stat-number" style="color:#22c55e">{stats['active']}</div><div class="stat-label">Активних</div></div>
-    <div class="stat-card"><div class="stat-number" style="color:#3b82f6">{stats['completed']}</div><div class="stat-label">Завершено</div></div>
-    <div class="stat-card"><div class="stat-number" style="color:#ef4444">{stats['high_impact']}</div><div class="stat-label">Високий вплив</div></div>
-    <div class="stat-card"><div class="stat-number">{stats['avg_progress']}%</div><div class="stat-label">Сер. прогрес</div></div>
-    <div class="stat-card"><div class="stat-number">{stats['active_jobs']}/{stats['total_jobs']}</div><div class="stat-label">Cron</div></div>
+    <div class="stat-card"><div class="stat-number">__SP__</div><div class="stat-label">Проєктів</div></div>
+    <div class="stat-card"><div class="stat-number" style="color:#22c55e">__SA__</div><div class="stat-label">Активних</div></div>
+    <div class="stat-card"><div class="stat-number" style="color:#3b82f6">__SC__</div><div class="stat-label">Завершено</div></div>
+    <div class="stat-card"><div class="stat-number" style="color:#ef4444">__SH__</div><div class="stat-label">Високий вплив</div></div>
+    <div class="stat-card"><div class="stat-number">__SAP__%</div><div class="stat-label">Сер. прогрес</div></div>
+    <div class="stat-card"><div class="stat-number">__SAJ__/__STJ__</div><div class="stat-label">Cron</div></div>
   </div>
-
-  <!-- Today's Tasks -->
   <div class="section">
     <h2 class="section-title">📋 Задачі на сьогодні</h2>
     <div class="tasks-container">
-      {main_html}
-      {'<div class="task-divider"></div>' if additional else ""}
-      {additional_html}
+      __MAIN_HTML__
+      __ADDITIONAL_HTML__
     </div>
   </div>
-
-  <!-- Projects -->
   <div class="section">
     <h2 class="section-title">📊 Проєкти</h2>
     <div class="projects-grid">
-      {project_cards if project_cards else '<p class="empty">Немає проєктів</p>'}
+      __PROJECT_CARDS__
     </div>
   </div>
-
-  <!-- Cron Jobs (compact) -->
   <div class="section">
     <h2 class="section-title">⏰ Заплановані задачі</h2>
     <div class="cron-list">
-      {cron_html}
+      __CRON_HTML__
     </div>
   </div>
-
-  <!-- Recent Sessions -->
   <div class="section">
     <h2 class="section-title">💬 Останні сесії</h2>
     <div class="sessions-list">
-      {sessions_html}
+      __SESSIONS_HTML__
     </div>
   </div>
-
 </div>
-
 <div class="footer">
   <p>Kolodii OS Dashboard · Автоматично згенеровано щодня</p>
   <p style="margin-top:0.3rem">Всім фітнес. Бач, як добре. 💪</p>
 </div>
-
 </body>
 </html>"""
+
+    divider = '<div class="task-divider"></div>' if additional else ''
+    proj_fallback = '<p class="empty">Немає проєктів</p>' if not project_cards else project_cards
+
+    html = tpl.replace('__NOW__', now)
+    html = html.replace('__SP__', str(sp))
+    html = html.replace('__SA__', str(sa))
+    html = html.replace('__SC__', str(sc))
+    html = html.replace('__SH__', str(sh))
+    html = html.replace('__SAP__', str(sap))
+    html = html.replace('__SAJ__', str(saj))
+    html = html.replace('__STJ__', str(stj))
+    html = html.replace('__MAIN_HTML__', main_html)
+    html = html.replace('__ADDITIONAL_HTML__', divider + additional_html)
+    html = html.replace('__PROJECT_CARDS__', proj_fallback)
+    html = html.replace('__CRON_HTML__', cron_html)
+    html = html.replace('__SESSIONS_HTML__', sessions_html)
+
+    return html
 
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
