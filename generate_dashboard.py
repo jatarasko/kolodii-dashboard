@@ -615,6 +615,9 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
     html = html.replace('__CRON_HTML__', cron_html)
     html = html.replace('__SESSIONS_HTML__', sessions_html)
 
+    # Final: collapse double braces (CSS) to single
+    html = html.replace('{{', '{').replace('}}', '}')
+
     return html
 
 
