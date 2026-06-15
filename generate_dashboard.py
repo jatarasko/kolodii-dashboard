@@ -132,27 +132,95 @@ def parse_ledger() -> list[dict]:
     return projects
 
 
-def get_todays_tasks(projects: list[dict]) -> dict:
+def translate_next_step(text: str) -> str:
+    """Translate common next_step phrases from English to Ukrainian."""
+    if not text:
+        return ""
+    translations = {
+        "Systematize check-in and progress tracking workflows": "Систематизувати воркфлоу чек-інів та відстеження прогресу",
+        "Complete first operational workflow (client onboarding or check-in automation)": "Завершити перший операційний воркфлоу (онбордінг клієнта або автоматизація чек-інів)",
+        "Complete bot logic and integrate with course content": "Завершити логіку бота та інтегрувати з контентом курсу",
+        "Define brand voice, content pillars, and first month of content": "Визначити бренд-войс, контент-пілляри та перший місяць контенту",
+        "Launch next cohort or open evergreen enrollment": "Запустити наступну когорту або відкрити evergreen запис",
+        "Finalize content, design, and publish": "Фіналізувати контент, дизайн та опублікувати",
+        "Secure first corporate client or pilot lecture": "Залучити першого корпоративного клієнта або провести пілотну лекцію",
+        "Phase 1 complete: manual prototype validated with Taras feedback": "Фаза 1 завершена: ручний прототип валідований з фідбеком Тараса",
+        "Establish consistent publishing cadence (1x/week minimum)": "Встановити стабільний ритм публікацій (мінімум 1 раз/тиждень)",
+    }
+    # Try exact match first
+    if text in translations:
+        return translations[text]
+    # Try partial match
+    for eng, ukr in translations.items():
+        if eng.lower() in text.lower() or text.lower() in eng.lower():
+            return ukr
+    # Return original if no match
+    return text
+
+
+def get_todays_tasks(projects: list[dict], sessions: list[dict]) -> dict:
     """
-    Build today's task list from projects.
-    - main_goal: highest priority active project with next_step
-    - additional: other active projects with next_step
+    Build today's task list from recent sessions.
+    Extracts actionable items from session summaries.
+    Falls back to project next_steps if no sessions have clear tasks.
     """
+    tasks = []
+    seen = set()
+
+    # Extract tasks from recent sessions (last 3 non-empty summaries)
+    for s in sessions[:5]:
+        summary = s.get("summary", "")
+        topic = s.get("topic", s.get("title", ""))
+        if not summary and not topic:
+            continue
+
+        # Build task description: "Тема — що зроблено/наступний крок"
+        task_desc = ""
+        if topic and summary:
+            task_desc = f"{topic} — {summary}"
+        elif summary:
+            task_desc = summary
+        elif topic:
+            task_desc = topic
+
+        if task_desc and task_desc not in seen and len(task_desc) > 20:
+            tasks.append({
+                "title": topic[:60] if topic else "Завдання",
+                "step": truncate(task_desc, 120),
+                "progress": None,
+            })
+            seen.add(task_desc)
+
+    # If we have tasks from sessions, use them
+    if tasks:
+        main_goal = tasks[0]
+        additional = tasks[1:6]
+        return {
+            "main_goal": main_goal,
+            "additional": additional,
+        }
+
+    # Fallback: use project next_steps
     active = [p for p in projects if p["status"] == "active" and p.get("next_step")]
     high = [p for p in active if p["impact"] == "high"]
-    medium = [p for p in active if p["impact"] == "medium"]
-    low = [p for p in active if p["impact"] == "low"]
+    main = high[0] if high else (active[0] if active else None)
+    additional = [p for p in active if p != main][:5]
 
-    main_goal = high[0] if high else (active[0] if active else None)
-    additional = [p for p in active if p != main_goal]
+    if main:
+        return {
+            "main_goal": {
+                "title": main["name"],
+                "step": translate_next_step(main["next_step"]),
+                "progress": main["progress"],
+            },
+            "additional": [{
+                "title": p["name"],
+                "step": translate_next_step(p["next_step"]),
+                "progress": p["progress"],
+            } for p in additional],
+        }
 
-    # Limit to top 5 additional
-    additional = additional[:5]
-
-    return {
-        "main_goal": main_goal,
-        "additional": additional,
-    }
+    return {"main_goal": None, "additional": []}
 
 
 # ─── Get cron jobs info ───────────────────────────────────────────────────────
@@ -196,18 +264,19 @@ def get_cron_jobs() -> list[dict]:
 
 def get_recent_sessions(limit: int = 10) -> list[dict]:
     """
-    Get recent sessions with title, date, source, message_count.
-    For summary: extract last assistant message as approximation.
+    Get recent sessions: filter out cron, keep only tui/telegram/cli.
+    For each: title, topic (first user msg), summary (last assistant msg).
     """
     sessions = []
     if not STATE_DB.exists():
         return sessions
 
     try:
-        # Get session list
+        # Filter out cron sessions — keep only real user sessions
         output = run(
             f'sqlite3 "{STATE_DB}" "SELECT id, title, source, started_at, message_count '
-            f'FROM sessions WHERE archived=0 ORDER BY started_at DESC LIMIT {limit};" 2>/dev/null'
+            f'FROM sessions WHERE archived=0 AND source IN (\'tui\',\'telegram\',\'cli\') '
+            f'ORDER BY started_at DESC LIMIT {limit};" 2>/dev/null'
         )
         if not output:
             return sessions
@@ -230,37 +299,32 @@ def get_recent_sessions(limit: int = 10) -> list[dict]:
 
             msg_count = parts[4].strip()
 
-            # Fallback title
-            if not title:
-                # Try to get first user message
-                first_msg = run(
-                    f'sqlite3 "{STATE_DB}" "SELECT substr(content, 1, 80) FROM messages '
-                    f'WHERE session_id=\'{sid}\' AND role=\'user\' ORDER BY timestamp ASC LIMIT 1;" 2>/dev/null'
-                )
-                title = first_msg.strip()[:60] + "…" if first_msg.strip() else sid[:30]
-
-            # Get last assistant message for summary
-            last_assistant = run(
-                f'sqlite3 "{STATE_DB}" "SELECT substr(content, 1, 200) FROM messages '
-                f'WHERE session_id=\'{sid}\' AND role=\'assistant\' ORDER BY timestamp DESC LIMIT 1;" 2>/dev/null'
-            )
-            summary = ""
-            if last_assistant.strip():
-                # Clean up: take first meaningful line
-                for aline in last_assistant.strip().split('\n'):
-                    aline = aline.strip()
-                    if aline and not aline.startswith('#') and len(aline) > 10:
-                        summary = truncate(aline, 100)
-                        break
-                if not summary:
-                    summary = truncate(last_assistant.strip(), 100)
-
-            # Get first user message for recommendation context
+            # Get first user message as topic
             first_user = run(
-                f'sqlite3 "{STATE_DB}" "SELECT substr(content, 1, 150) FROM messages '
+                f'sqlite3 "{STATE_DB}" "SELECT substr(content, 1, 120) FROM messages '
                 f'WHERE session_id=\'{sid}\' AND role=\'user\' ORDER BY timestamp ASC LIMIT 1;" 2>/dev/null'
             )
             topic = truncate(first_user.strip(), 80) if first_user.strip() else ""
+
+            # If no title, use topic
+            if not title:
+                title = topic if topic else sid[:30]
+
+            # Get last assistant message for summary
+            last_asst = run(
+                f'sqlite3 "{STATE_DB}" "SELECT substr(content, 1, 300) FROM messages '
+                f'WHERE session_id=\'{sid}\' AND role=\'assistant\' ORDER BY timestamp DESC LIMIT 1;" 2>/dev/null'
+            )
+            summary = ""
+            if last_asst.strip():
+                # Take first meaningful line (skip headers, empty lines)
+                for aline in last_asst.strip().split('\n'):
+                    aline = aline.strip()
+                    if aline and not aline.startswith('#') and not aline.startswith('---') and len(aline) > 15:
+                        summary = truncate(aline, 120)
+                        break
+                if not summary:
+                    summary = truncate(last_asst.strip(), 120)
 
             sessions.append({
                 "title": title,
@@ -325,7 +389,8 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
 
         next_step_html = ""
         if p.get("next_step"):
-            next_step_html = f'<div class="next-step">🎯 Наступний крок: {p["next_step"]}</div>'
+            translated = translate_next_step(p["next_step"])
+            next_step_html = f'<div class="next-step">Наступний крок: {translated}</div>'
 
         project_cards += f"""
       <div class="project-card status-{p['status']}">
@@ -345,21 +410,21 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
         {next_step_html}
       </div>"""
 
-    # ── Compact cron jobs ──
+    # ── Compact cron jobs (square grid) ──
     cron_html = ""
     for j in jobs:
         state_color = "#22c55e" if j.get("enabled") else "#9ca3af"
-        state_text = "🟢" if j.get("enabled") else "⚪"
         next_run = j.get("next_run", "")
         if next_run:
             next_run = next_run[:16].replace("T", " ")
-
         cron_html += f"""
-      <div class="cron-compact">
-        <span class="cron-dot" style="background:{state_color}"></span>
-        <span class="cron-name">{j['name']}</span>
-        <span class="cron-schedule">{j.get('schedule', '')}</span>
-        <span class="cron-next">→ {next_run}</span>
+      <div class="cron-card">
+        <div class="cron-card-top">
+          <span class="cron-dot" style="background:{state_color}"></span>
+          <span class="cron-card-name">{j['name']}</span>
+        </div>
+        <div class="cron-card-schedule">{j.get('schedule', '')}</div>
+        <div class="cron-card-next">{next_run}</div>
       </div>"""
 
     if not cron_html:
@@ -367,20 +432,17 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
 
     # ── Sessions with summary ──
     sessions_html = ""
-    source_icons = {"tui": "💻", "telegram": "📱", "cron": "⏰"}
+    source_icons = {"tui": "💻", "telegram": "📱", "cli": "🖥️"}
     for s in sessions[:8]:
         icon = source_icons.get(s.get("source", ""), "💬")
-        summary_text = s.get("summary", "")
-        topic_text = s.get("topic", "")
+        session_topic = s.get("topic", "")
+        session_summary = s.get("summary", "")
 
-        # Build subtitle: use topic (first user msg) + summary (last assistant msg)
-        subtitle_parts = []
-        if topic_text and topic_text != s["title"]:
-            subtitle_parts.append(f"Тема: {topic_text}")
-        if summary_text:
-            subtitle_parts.append(f"Резюме: {summary_text}")
-
-        subtitle = " · ".join(subtitle_parts) if subtitle_parts else ""
+        details_html = ""
+        if session_topic and session_topic != s['title']:
+            details_html += f'<div class="session-topic">{session_topic}</div>'
+        if session_summary:
+            details_html += f'<div class="session-summary">{session_summary}</div>'
 
         sessions_html += f"""
       <div class="session-card">
@@ -388,7 +450,7 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
           <span class="session-title">{icon} {s['title']}</span>
           <span class="session-date">{s['date']}</span>
         </div>
-        {"<div class='session-summary'>" + subtitle + "</div>" if subtitle else ""}
+        {details_html}
         <div class="session-meta">
           <span>{s.get('source', '')}</span>
           <span>{s.get('messages', '')} повідомлень</span>
@@ -399,42 +461,54 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
         sessions_html = '<p class="empty">Немає даних про сесії</p>'
 
     # ── Today's tasks ──
+    # ── Today's tasks (from sessions or projects) ──
     main = todays_tasks.get("main_goal")
     additional = todays_tasks.get("additional", [])
 
-    main_html = ""
-    if main:
-        main_html = f"""
-      <div class="task-main">
-        <div class="task-label">🎯 Головна мета</div>
-        <div class="task-name">{main['name']}</div>
-        <div class="task-step">{main.get('next_step', '')}</div>
+    if main and main.get("title"):
+        main_step = main.get("step", "")
+        main_progress = main.get("progress")
+        progress_html = ""
+        if main_progress is not None:
+            progress_html = f"""
         <div class="task-progress">
           <div class="progress-bar-bg small">
-            <div class="progress-bar-fill" style="width:{main['progress']}%; background:#667eea"></div>
+            <div class="progress-bar-fill" style="width:{main_progress}%; background:#667eea"></div>
           </div>
-          <span>{main['progress']}%</span>
-        </div>
+          <span>{main_progress}%</span>
+        </div>"""
+        main_html = f"""
+      <div class="task-main">
+        <div class="task-label">Головна мета</div>
+        <div class="task-name">{main['title']}</div>
+        <div class="task-step">{main_step}</div>
+        {progress_html}
       </div>"""
     else:
         main_html = """
       <div class="task-main">
-        <div class="task-label">🎯 Головна мета</div>
+        <div class="task-label">Головна мета</div>
         <div class="task-name empty">Немає активних задач</div>
       </div>"""
 
     additional_html = ""
     for t in additional:
-        additional_html += f"""
-      <div class="task-item">
-        <div class="task-item-name">{t['name']}</div>
-        <div class="task-item-step">{t.get('next_step', '')}</div>
+        t_step = t.get("step", "")
+        t_progress = t.get("progress")
+        progress_html = ""
+        if t_progress is not None:
+            progress_html = f"""
         <div class="task-item-progress">
           <div class="progress-bar-bg small">
-            <div class="progress-bar-fill" style="width:{t['progress']}%; background:#94a3b8"></div>
+            <div class="progress-bar-fill" style="width:{t_progress}%; background:#94a3b8"></div>
           </div>
-          <span>{t['progress']}%</span>
-        </div>
+          <span>{t_progress}%</span>
+        </div>"""
+        additional_html += f"""
+      <div class="task-item">
+        <div class="task-item-name">{t['title']}</div>
+        <div class="task-item-step">{t_step}</div>
+        {progress_html}
       </div>"""
 
     # Prepare flat variables for template (avoids f-string dict access issues)
@@ -525,19 +599,22 @@ def generate_html(projects: list[dict], jobs: list[dict], sessions: list[dict],
     .progress-bar-fill {{ height: 100%; border-radius: 3px; transition: width 0.4s ease; }}
     .progress-text {{ font-size: 0.7rem; font-weight: 600; color: #475569; min-width: 30px; text-align: right; }}
     .next-step {{ font-size: 0.75rem; color: #64748b; margin-top: 0.4rem; padding: 0.4rem 0.6rem; background: #f8fafc; border-radius: 6px; border-left: 2px solid #667eea; }}
-    .cron-list {{ background: white; border-radius: 10px; padding: 0.75rem 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }}
-    .cron-compact {{ display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0; border-bottom: 1px solid #f8fafc; font-size: 0.8rem; }}
-    .cron-compact:last-child {{ border-bottom: none; }}
-    .cron-dot {{ width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }}
-    .cron-name {{ font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
-    .cron-schedule {{ color: #94a3b8; font-size: 0.7rem; flex-shrink: 0; }}
-    .cron-next {{ color: #64748b; font-size: 0.7rem; flex-shrink: 0; }}
+    .cron-list {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }}
+    .cron-card {{
+      background: white; border-radius: 8px; padding: 0.6rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
+    }}
+    .cron-card-top {{ display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.3rem; }}
+    .cron-card-name {{ font-size: 0.7rem; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .cron-card-schedule {{ font-size: 0.65rem; color: #94a3b8; }}
+    .cron-card-next {{ font-size: 0.6rem; color: #64748b; margin-top: 0.15rem; }}
     .sessions-list {{ display: flex; flex-direction: column; gap: 0.5rem; }}
     .session-card {{ background: white; border-radius: 10px; padding: 0.85rem 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }}
     .session-top {{ display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.25rem; }}
     .session-title {{ font-size: 0.85rem; font-weight: 600; flex: 1; }}
     .session-date {{ font-size: 0.7rem; color: #94a3b8; white-space: nowrap; flex-shrink: 0; }}
     .session-summary {{ font-size: 0.75rem; color: #64748b; margin-bottom: 0.35rem; line-height: 1.4; }}
+    .session-topic {{ font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.2rem; font-style: italic; }}
     .session-meta {{ display: flex; gap: 0.75rem; font-size: 0.65rem; color: #94a3b8; }}
     .empty {{ color: #94a3b8; font-style: italic; padding: 0.75rem; font-size: 0.85rem; }}
     .footer {{ text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.75rem; }}
@@ -639,8 +716,10 @@ def main():
     stats = calc_stats(projects, jobs)
     print(f"   Avg progress: {stats['avg_progress']}%")
 
-    todays_tasks = get_todays_tasks(projects)
-    print(f"   Main goal: {todays_tasks['main_goal']['name'] if todays_tasks['main_goal'] else '—'}")
+    todays_tasks = get_todays_tasks(projects, sessions)
+    mg = todays_tasks['main_goal']
+    mg_name = mg['title'] if mg else '—'
+    print(f"   Main goal: {mg_name}")
     print(f"   Additional: {len(todays_tasks['additional'])}")
 
     html = generate_html(projects, jobs, sessions, stats, todays_tasks)
@@ -655,7 +734,7 @@ def main():
         "projects": projects,
         "jobs": jobs,
         "todays_tasks": {
-            "main_goal": todays_tasks["main_goal"]["name"] if todays_tasks["main_goal"] else None,
+            "main_goal": todays_tasks["main_goal"]["title"] if todays_tasks["main_goal"] else None,
             "additional_count": len(todays_tasks["additional"]),
         },
     }

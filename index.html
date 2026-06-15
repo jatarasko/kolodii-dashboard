@@ -77,19 +77,22 @@
     .progress-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
     .progress-text { font-size: 0.7rem; font-weight: 600; color: #475569; min-width: 30px; text-align: right; }
     .next-step { font-size: 0.75rem; color: #64748b; margin-top: 0.4rem; padding: 0.4rem 0.6rem; background: #f8fafc; border-radius: 6px; border-left: 2px solid #667eea; }
-    .cron-list { background: white; border-radius: 10px; padding: 0.75rem 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
-    .cron-compact { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0; border-bottom: 1px solid #f8fafc; font-size: 0.8rem; }
-    .cron-compact:last-child { border-bottom: none; }
-    .cron-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .cron-name { font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .cron-schedule { color: #94a3b8; font-size: 0.7rem; flex-shrink: 0; }
-    .cron-next { color: #64748b; font-size: 0.7rem; flex-shrink: 0; }
+    .cron-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .cron-card {
+      background: white; border-radius: 8px; padding: 0.6rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
+    }
+    .cron-card-top { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.3rem; }
+    .cron-card-name { font-size: 0.7rem; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cron-card-schedule { font-size: 0.65rem; color: #94a3b8; }
+    .cron-card-next { font-size: 0.6rem; color: #64748b; margin-top: 0.15rem; }
     .sessions-list { display: flex; flex-direction: column; gap: 0.5rem; }
     .session-card { background: white; border-radius: 10px; padding: 0.85rem 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
     .session-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.25rem; }
     .session-title { font-size: 0.85rem; font-weight: 600; flex: 1; }
     .session-date { font-size: 0.7rem; color: #94a3b8; white-space: nowrap; flex-shrink: 0; }
     .session-summary { font-size: 0.75rem; color: #64748b; margin-bottom: 0.35rem; line-height: 1.4; }
+    .session-topic { font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.2rem; font-style: italic; }
     .session-meta { display: flex; gap: 0.75rem; font-size: 0.65rem; color: #94a3b8; }
     .empty { color: #94a3b8; font-style: italic; padding: 0.75rem; font-size: 0.85rem; }
     .footer { text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.75rem; }
@@ -106,7 +109,7 @@
 <div class="header">
   <h1>🏋️ Kolodii OS</h1>
   <div class="subtitle">Операційна система Kolodii Fitness</div>
-  <div class="updated">Оновлено: 15.06.2026 23:44</div>
+  <div class="updated">Оновлено: 16.06.2026 00:39</div>
 </div>
 <div class="container">
   <div class="stats-grid">
@@ -122,66 +125,33 @@
     <div class="tasks-container">
       
       <div class="task-main">
-        <div class="task-label">🎯 Головна мета</div>
-        <div class="task-name">Online Fitness Support</div>
-        <div class="task-step">Check-in Agent created — deploy and test with clients</div>
-        <div class="task-progress">
-          <div class="progress-bar-bg small">
-            <div class="progress-bar-fill" style="width:75%; background:#667eea"></div>
-          </div>
-          <span>75%</span>
-        </div>
+        <div class="task-label">Головна мета</div>
+        <div class="task-name">поясни значення всі дошок в канбан</div>
+        <div class="task-step">поясни значення всі дошок в канбан — База канбану пуста (всі завдання заархівовано). Давай все одно поясню значення всіх…</div>
+        
       </div>
       <div class="task-divider"></div>
       <div class="task-item">
-        <div class="task-item-name">Kolodii OS Automation</div>
-        <div class="task-item-step">Check-in Agent v1.0 completed — first operational workflow automated</div>
-        <div class="task-item-progress">
-          <div class="progress-bar-bg small">
-            <div class="progress-bar-fill" style="width:45%; background:#94a3b8"></div>
-          </div>
-          <span>45%</span>
-        </div>
+        <div class="task-item-name">[The user attached an image but analysis failed.]
+[You can e</div>
+        <div class="task-item-step">[The user attached an image but analysis failed.]
+[You can examine it with visio… — І як результат? Бачиш канбан-дошку з…</div>
+        
       </div>
       <div class="task-item">
-        <div class="task-item-name">Telegram Course Bot</div>
-        <div class="task-item-step">Complete bot logic and integrate with course content</div>
-        <div class="task-item-progress">
-          <div class="progress-bar-bg small">
-            <div class="progress-bar-fill" style="width:40%; background:#94a3b8"></div>
-          </div>
-          <span>40%</span>
-        </div>
+        <div class="task-item-name">work kanban task t_87bb12e7</div>
+        <div class="task-item-step">work kanban task t_87bb12e7 — **OBJECTIVE:** Створити Nutrition Agent для відповідей на питання про харчування, рецепти,…</div>
+        
       </div>
       <div class="task-item">
-        <div class="task-item-name">Content System</div>
-        <div class="task-item-step">Content pillars defined, SMM pipeline automated (4 cron jobs daily), first content batch produced</div>
-        <div class="task-item-progress">
-          <div class="progress-bar-bg small">
-            <div class="progress-bar-fill" style="width:25%; background:#94a3b8"></div>
-          </div>
-          <span>25%</span>
-        </div>
+        <div class="task-item-name">work kanban task t_07831980</div>
+        <div class="task-item-step">work kanban task t_07831980 — Task complete. Ось що зроблено:</div>
+        
       </div>
       <div class="task-item">
-        <div class="task-item-name">Telegram Healthy Plate Course</div>
-        <div class="task-item-step">Launch next cohort or open evergreen enrollment</div>
-        <div class="task-item-progress">
-          <div class="progress-bar-bg small">
-            <div class="progress-bar-fill" style="width:60%; background:#94a3b8"></div>
-          </div>
-          <span>60%</span>
-        </div>
-      </div>
-      <div class="task-item">
-        <div class="task-item-name">Recipe Book</div>
-        <div class="task-item-step">Finalize content, design, and publish</div>
-        <div class="task-item-progress">
-          <div class="progress-bar-bg small">
-            <div class="progress-bar-fill" style="width:50%; background:#94a3b8"></div>
-          </div>
-          <span>50%</span>
-        </div>
+        <div class="task-item-name">work kanban task t_fb78cb0b</div>
+        <div class="task-item-step">work kanban task t_fb78cb0b — Створити Check-in Agent для щоденних чекінів з клієнтами.</div>
+        
       </div>
     </div>
   </div>
@@ -203,7 +173,7 @@
           </div>
           <span class="progress-text">75%</span>
         </div>
-        <div class="next-step">🎯 Наступний крок: Check-in Agent created — deploy and test with clients</div>
+        <div class="next-step">Наступний крок: Check-in Agent created — deploy and test with clients</div>
       </div>
       <div class="project-card status-active">
         <div class="project-header">
@@ -219,7 +189,7 @@
           </div>
           <span class="progress-text">45%</span>
         </div>
-        <div class="next-step">🎯 Наступний крок: Check-in Agent v1.0 completed — first operational workflow automated</div>
+        <div class="next-step">Наступний крок: Check-in Agent v1.0 completed — first operational workflow automated</div>
       </div>
       <div class="project-card status-active">
         <div class="project-header">
@@ -235,7 +205,7 @@
           </div>
           <span class="progress-text">40%</span>
         </div>
-        <div class="next-step">🎯 Наступний крок: Complete bot logic and integrate with course content</div>
+        <div class="next-step">Наступний крок: Завершити логіку бота та інтегрувати з контентом курсу</div>
       </div>
       <div class="project-card status-active">
         <div class="project-header">
@@ -251,7 +221,7 @@
           </div>
           <span class="progress-text">25%</span>
         </div>
-        <div class="next-step">🎯 Наступний крок: Content pillars defined, SMM pipeline automated (4 cron jobs daily), first content batch produced</div>
+        <div class="next-step">Наступний крок: Content pillars defined, SMM pipeline automated (4 cron jobs daily), first content batch produced</div>
       </div>
       <div class="project-card status-active">
         <div class="project-header">
@@ -267,7 +237,7 @@
           </div>
           <span class="progress-text">60%</span>
         </div>
-        <div class="next-step">🎯 Наступний крок: Launch next cohort or open evergreen enrollment</div>
+        <div class="next-step">Наступний крок: Запустити наступну когорту або відкрити evergreen запис</div>
       </div>
       <div class="project-card status-active">
         <div class="project-header">
@@ -283,7 +253,7 @@
           </div>
           <span class="progress-text">50%</span>
         </div>
-        <div class="next-step">🎯 Наступний крок: Finalize content, design, and publish</div>
+        <div class="next-step">Наступний крок: Фіналізувати контент, дизайн та опублікувати</div>
       </div>
       <div class="project-card status-active">
         <div class="project-header">
@@ -299,7 +269,7 @@
           </div>
           <span class="progress-text">20%</span>
         </div>
-        <div class="next-step">🎯 Наступний крок: Secure first corporate client or pilot lecture</div>
+        <div class="next-step">Наступний крок: Залучити першого корпоративного клієнта або провести пілотну лекцію</div>
       </div>
       <div class="project-card status-paused">
         <div class="project-header">
@@ -315,7 +285,7 @@
           </div>
           <span class="progress-text">30%</span>
         </div>
-        <div class="next-step">🎯 Наступний крок: Establish consistent publishing cadence (1x/week minimum)</div>
+        <div class="next-step">Наступний крок: Встановити стабільний ритм публікацій (мінімум 1 раз/тиждень)</div>
       </div>
     </div>
   </div>
@@ -323,47 +293,61 @@
     <h2 class="section-title">⏰ Заплановані задачі</h2>
     <div class="cron-list">
       
-      <div class="cron-compact">
-        <span class="cron-dot" style="background:#22c55e"></span>
-        <span class="cron-name">Відео-ідеї: Hermes Agent Use Cases</span>
-        <span class="cron-schedule">0 9 * * *</span>
-        <span class="cron-next">→ 2026-06-16 09:00</span>
+      <div class="cron-card">
+        <div class="cron-card-top">
+          <span class="cron-dot" style="background:#22c55e"></span>
+          <span class="cron-card-name">Відео-ідеї: Hermes Agent Use Cases</span>
+        </div>
+        <div class="cron-card-schedule">0 9 * * *</div>
+        <div class="cron-card-next">2026-06-16 09:00</div>
       </div>
-      <div class="cron-compact">
-        <span class="cron-dot" style="background:#22c55e"></span>
-        <span class="cron-name">SMM: Research Agent</span>
-        <span class="cron-schedule">0 9 * * *</span>
-        <span class="cron-next">→ 2026-06-16 09:00</span>
+      <div class="cron-card">
+        <div class="cron-card-top">
+          <span class="cron-dot" style="background:#22c55e"></span>
+          <span class="cron-card-name">SMM: Research Agent</span>
+        </div>
+        <div class="cron-card-schedule">0 9 * * *</div>
+        <div class="cron-card-next">2026-06-16 09:00</div>
       </div>
-      <div class="cron-compact">
-        <span class="cron-dot" style="background:#22c55e"></span>
-        <span class="cron-name">SMM: Strategy Agent</span>
-        <span class="cron-schedule">20 9 * * *</span>
-        <span class="cron-next">→ 2026-06-16 09:20</span>
+      <div class="cron-card">
+        <div class="cron-card-top">
+          <span class="cron-dot" style="background:#22c55e"></span>
+          <span class="cron-card-name">SMM: Strategy Agent</span>
+        </div>
+        <div class="cron-card-schedule">20 9 * * *</div>
+        <div class="cron-card-next">2026-06-16 09:20</div>
       </div>
-      <div class="cron-compact">
-        <span class="cron-dot" style="background:#22c55e"></span>
-        <span class="cron-name">SMM: Writer Agent</span>
-        <span class="cron-schedule">40 9 * * *</span>
-        <span class="cron-next">→ 2026-06-16 09:40</span>
+      <div class="cron-card">
+        <div class="cron-card-top">
+          <span class="cron-dot" style="background:#22c55e"></span>
+          <span class="cron-card-name">SMM: Writer Agent</span>
+        </div>
+        <div class="cron-card-schedule">40 9 * * *</div>
+        <div class="cron-card-next">2026-06-16 09:40</div>
       </div>
-      <div class="cron-compact">
-        <span class="cron-dot" style="background:#22c55e"></span>
-        <span class="cron-name">SMM: Chief of Staff — Compile & Deliver</span>
-        <span class="cron-schedule">0 10 * * *</span>
-        <span class="cron-next">→ 2026-06-16 10:00</span>
+      <div class="cron-card">
+        <div class="cron-card-top">
+          <span class="cron-dot" style="background:#22c55e"></span>
+          <span class="cron-card-name">SMM: Chief of Staff — Compile & Deliver</span>
+        </div>
+        <div class="cron-card-schedule">0 10 * * *</div>
+        <div class="cron-card-next">2026-06-16 10:00</div>
       </div>
-      <div class="cron-compact">
-        <span class="cron-dot" style="background:#22c55e"></span>
-        <span class="cron-name">Dashboard: Daily Update & Telegram</span>
-        <span class="cron-schedule">0 8 * * *</span>
-        <span class="cron-next">→ 2026-06-16 08:00</span>
+      <div class="cron-card">
+        <div class="cron-card-top">
+          <span class="cron-dot" style="background:#22c55e"></span>
+          <span class="cron-card-name">Dashboard: Daily Update & Telegram</span>
+        </div>
+        <div class="cron-card-schedule">0 8 * * *</div>
+        <div class="cron-card-next">2026-06-16 08:00</div>
       </div>
-      <div class="cron-compact">
-        <span class="cron-dot" style="background:#22c55e"></span>
-        <span class="cron-name">Щоденний пріоритет Тараса</span>
-        <span class="cron-schedule">0 9 * * *</span>
-        <span class="cron-next">→ 2026-06-16 09:00</span>
+      <div class="cron-card">
+        <div class="cron-card-top">
+          <span class="cron-dot" style="background:#22c55e"></span>
+          <span class="cron-card-name">Щоденний пріоритет Тараса</span>
+        </div>
+        <div class="cron-card-schedule">0 9 * * *</div>
+        <div class="cron-card-next">2026-06-16 09:00</div>
       </div>
     </div>
   </div>
@@ -373,90 +357,91 @@
       
       <div class="session-card">
         <div class="session-top">
-          <span class="session-title">⏰ [IMPORTANT: You are running as a scheduled cron job. DELIVER…</span>
-          <span class="session-date">15.06 14:00</span>
+          <span class="session-title">💻 Kanban Board Column Meanings Explained</span>
+          <span class="session-date">15.06 02:54</span>
         </div>
-        <div class='session-summary'>Тема: [IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon… · Резюме: Тарас, нагадування за планом.</div>
+        <div class="session-topic">поясни значення всі дошок в канбан</div><div class="session-summary">База канбану пуста (всі завдання заархівовано). Давай все одно поясню значення всіх колонок:</div>
         <div class="session-meta">
-          <span>cron</span>
-          <span>2 повідомлень</span>
+          <span>tui</span>
+          <span>25 повідомлень</span>
         </div>
       </div>
       <div class="session-card">
         <div class="session-top">
-          <span class="session-title">⏰ SMM: Chief of Staff — Compile & Deliver · Jun 15 10:01</span>
-          <span class="session-date">15.06 10:00</span>
+          <span class="session-title">💻 Kanban Board Interface Options</span>
+          <span class="session-date">15.06 00:24</span>
         </div>
-        <div class='session-summary'>Тема: [IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon… · Резюме: Ось готовий контент на сьогодні, створений на основі актуальних досліджень та стратегії бренду. Усі …</div>
+        <div class="session-topic">[The user attached an image but analysis failed.]
+[You can examine it with visio…</div><div class="session-summary">І як результат? Бачиш канбан-дошку з колонками і картками?</div>
         <div class="session-meta">
-          <span>cron</span>
-          <span>2 повідомлень</span>
+          <span>tui</span>
+          <span>74 повідомлень</span>
         </div>
       </div>
       <div class="session-card">
         <div class="session-top">
-          <span class="session-title">⏰ SMM: Writer Agent · Jun 15 09:40</span>
-          <span class="session-date">15.06 09:40</span>
+          <span class="session-title">🖥️ work kanban task t_87bb12e7</span>
+          <span class="session-date">14.06 16:51</span>
         </div>
-        <div class='session-summary'>Тема: [IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon… · Резюме: Я — Content Writer Agent для Kolodii Fitness SMM Monitoring System (Hy3).</div>
+        <div class="session-summary">**OBJECTIVE:** Створити Nutrition Agent для відповідей на питання про харчування, рецепти, планування меню. Інтеграція з…</div>
         <div class="session-meta">
-          <span>cron</span>
-          <span>2 повідомлень</span>
+          <span>cli</span>
+          <span>121 повідомлень</span>
         </div>
       </div>
       <div class="session-card">
         <div class="session-top">
-          <span class="session-title">⏰ SMM: Strategy Agent · Jun 15 09:23</span>
-          <span class="session-date">15.06 09:20</span>
+          <span class="session-title">🖥️ work kanban task t_07831980</span>
+          <span class="session-date">14.06 16:50</span>
         </div>
-        <div class='session-summary'>Тема: [IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon… · Резюме: **Findings processed:** 10 від Research Agent</div>
+        <div class="session-summary">Task complete. Ось що зроблено:</div>
         <div class="session-meta">
-          <span>cron</span>
-          <span>10 повідомлень</span>
+          <span>cli</span>
+          <span>24 повідомлень</span>
         </div>
       </div>
       <div class="session-card">
         <div class="session-top">
-          <span class="session-title">⏰ [IMPORTANT: You are running as a scheduled cron job. DELIVER…</span>
-          <span class="session-date">15.06 09:00</span>
+          <span class="session-title">🖥️ work kanban task t_fb78cb0b</span>
+          <span class="session-date">14.06 16:50</span>
         </div>
-        <div class='session-summary'>Тема: [IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon… · Резюме: У мене немає доступу до інструменту `send_message` — він недоступний у поточній конфігурації. Як це …</div>
+        <div class="session-summary">Створити Check-in Agent для щоденних чекінів з клієнтами.</div>
         <div class="session-meta">
-          <span>cron</span>
-          <span>4 повідомлень</span>
+          <span>cli</span>
+          <span>65 повідомлень</span>
         </div>
       </div>
       <div class="session-card">
         <div class="session-top">
-          <span class="session-title">⏰ [IMPORTANT: You are running as a scheduled cron job. DELIVER…</span>
-          <span class="session-date">15.06 09:00</span>
+          <span class="session-title">📱 Ранкова перевірка зв'язку</span>
+          <span class="session-date">14.06 08:27</span>
         </div>
-        <div class='session-summary'>Тема: [IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon… · Резюме: 🌅 Доброго ранку, Тарас! Ідеї з відео про Hermes Agent:</div>
+        <div class="session-topic">Прийом ранкова перевірка зв'язку</div><div class="session-summary">Надіслав. Тобі треба відповісти сюди в Telegram — я маю бачити твоє повідомлення тут.</div>
         <div class="session-meta">
-          <span>cron</span>
-          <span>8 повідомлень</span>
+          <span>telegram</span>
+          <span>317 повідомлень</span>
         </div>
       </div>
       <div class="session-card">
         <div class="session-top">
-          <span class="session-title">⏰ [IMPORTANT: You are running as a scheduled cron job. DELIVER…</span>
-          <span class="session-date">15.06 09:00</span>
+          <span class="session-title">📱 Привітання та початок розмови</span>
+          <span class="session-date">13.06 23:44</span>
         </div>
-        <div class='session-summary'>Тема: [IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon… · Резюме: All 10 findings saved. Here is the final report for the Strategy Agent:</div>
+        <div class="session-topic">Привіт</div><div class="session-summary">Крон-джоб створено ✅ Ось деталі:</div>
         <div class="session-meta">
-          <span>cron</span>
-          <span>44 повідомлень</span>
+          <span>telegram</span>
+          <span>12 повідомлень</span>
         </div>
       </div>
       <div class="session-card">
         <div class="session-top">
-          <span class="session-title">⏰ Dashboard: Daily Update & Telegram · Jun 15 08:18</span>
-          <span class="session-date">15.06 08:02</span>
+          <span class="session-title">💻 Дашборд прогресу</span>
+          <span class="session-date">13.06 16:30</span>
         </div>
-        <div class='session-summary'>Тема: [IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon… · Резюме: 📊 Kolodii OS Dashboard — 15.06.2026</div>
+        <div class="session-topic">Мне текало мать-эбизуальному.</div><div class="session-summary">Готово! Через 1-2 хвилини оновиться GitHub Pages. Відкрий **https://jatarasko.github.io/kolodii-dashboard/** — тепер має…</div>
         <div class="session-meta">
-          <span>cron</span>
-          <span>6 повідомлень</span>
+          <span>tui</span>
+          <span>310 повідомлень</span>
         </div>
       </div>
     </div>
