@@ -1,12 +1,12 @@
 {
-  "generated": "2026-06-16T00:39:04.739719",
+  "generated": "2026-06-18T10:55:30.522877",
   "stats": {
-    "total_projects": 8,
-    "active": 7,
+    "total_projects": 9,
+    "active": 8,
     "paused": 1,
     "completed": 0,
     "high_impact": 1,
-    "avg_progress": 43,
+    "avg_progress": 42,
     "active_jobs": 7,
     "total_jobs": 7
   },
@@ -61,6 +61,13 @@
       "next_step": "Secure first corporate client or pilot lecture"
     },
     {
+      "name": "Kolodii Fitness Guide (PDF)",
+      "status": "active",
+      "impact": "medium",
+      "progress": 35,
+      "next_step": "Full text written, recipes integrated, online coaching CTA added. Next: design/layout + photo integration"
+    },
+    {
       "name": "YouTube / Podcast",
       "status": "paused",
       "impact": "low",
@@ -74,7 +81,7 @@
       "state": "active",
       "name": "Відео-ідеї: Hermes Agent Use Cases",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-16T09:00:00+03:00",
+      "next_run": "2026-06-19T09:00:00+03:00",
       "deliver": "telegram"
     },
     {
@@ -82,7 +89,7 @@
       "state": "active",
       "name": "SMM: Research Agent",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-16T09:00:00+03:00",
+      "next_run": "2026-06-19T09:00:00+03:00",
       "deliver": "local"
     },
     {
@@ -90,7 +97,7 @@
       "state": "active",
       "name": "SMM: Strategy Agent",
       "schedule": "20 9 * * *",
-      "next_run": "2026-06-16T09:20:00+03:00",
+      "next_run": "2026-06-19T09:20:00+03:00",
       "deliver": "local"
     },
     {
@@ -98,7 +105,7 @@
       "state": "active",
       "name": "SMM: Writer Agent",
       "schedule": "40 9 * * *",
-      "next_run": "2026-06-16T09:40:00+03:00",
+      "next_run": "2026-06-19T09:40:00+03:00",
       "deliver": "local"
     },
     {
@@ -106,7 +113,7 @@
       "state": "active",
       "name": "SMM: Chief of Staff — Compile & Deliver",
       "schedule": "0 10 * * *",
-      "next_run": "2026-06-16T10:00:00+03:00",
+      "next_run": "2026-06-19T10:00:00+03:00",
       "deliver": "origin"
     },
     {
@@ -114,7 +121,7 @@
       "state": "active",
       "name": "Dashboard: Daily Update & Telegram",
       "schedule": "0 8 * * *",
-      "next_run": "2026-06-16T08:00:00+03:00",
+      "next_run": "2026-06-19T08:00:00+03:00",
       "deliver": "local"
     },
     {
@@ -122,12 +129,12 @@
       "state": "active",
       "name": "Щоденний пріоритет Тараса",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-16T09:00:00+03:00",
+      "next_run": "2026-06-19T09:00:00+03:00",
       "deliver": "origin"
     }
   ],
   "todays_tasks": {
-    "main_goal": "поясни значення всі дошок в канбан",
+    "main_goal": "work kanban task t_1f63f7c9",
     "additional_count": 4
   }
 }
