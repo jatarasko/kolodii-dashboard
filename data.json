@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-18T10:55:30.522877",
+  "generated": "2026-06-21T21:36:06.929276",
   "stats": {
     "total_projects": 9,
     "active": 8,
@@ -7,8 +7,8 @@
     "completed": 0,
     "high_impact": 1,
     "avg_progress": 42,
-    "active_jobs": 7,
-    "total_jobs": 7
+    "active_jobs": 8,
+    "total_jobs": 8
   },
   "projects": [
     {
@@ -81,7 +81,7 @@
       "state": "active",
       "name": "Відео-ідеї: Hermes Agent Use Cases",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-19T09:00:00+03:00",
+      "next_run": "2026-06-22T09:00:00+03:00",
       "deliver": "telegram"
     },
     {
@@ -89,7 +89,7 @@
       "state": "active",
       "name": "SMM: Research Agent",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-19T09:00:00+03:00",
+      "next_run": "2026-06-22T09:00:00+03:00",
       "deliver": "local"
     },
     {
@@ -97,7 +97,7 @@
       "state": "active",
       "name": "SMM: Strategy Agent",
       "schedule": "20 9 * * *",
-      "next_run": "2026-06-19T09:20:00+03:00",
+      "next_run": "2026-06-22T09:20:00+03:00",
       "deliver": "local"
     },
     {
@@ -105,7 +105,7 @@
       "state": "active",
       "name": "SMM: Writer Agent",
       "schedule": "40 9 * * *",
-      "next_run": "2026-06-19T09:40:00+03:00",
+      "next_run": "2026-06-22T09:40:00+03:00",
       "deliver": "local"
     },
     {
@@ -113,7 +113,7 @@
       "state": "active",
       "name": "SMM: Chief of Staff — Compile & Deliver",
       "schedule": "0 10 * * *",
-      "next_run": "2026-06-19T10:00:00+03:00",
+      "next_run": "2026-06-22T10:00:00+03:00",
       "deliver": "origin"
     },
     {
@@ -121,7 +121,7 @@
       "state": "active",
       "name": "Dashboard: Daily Update & Telegram",
       "schedule": "0 8 * * *",
-      "next_run": "2026-06-19T08:00:00+03:00",
+      "next_run": "2026-06-22T08:00:00+03:00",
       "deliver": "local"
     },
     {
@@ -129,12 +129,20 @@
       "state": "active",
       "name": "Щоденний пріоритет Тараса",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-19T09:00:00+03:00",
+      "next_run": "2026-06-22T09:00:00+03:00",
       "deliver": "origin"
+    },
+    {
+      "enabled": true,
+      "state": "active",
+      "name": "Sales Guide Daily Lesson",
+      "schedule": "0 10 * * *",
+      "next_run": "2026-06-22T10:00:00+03:00",
+      "deliver": "local"
     }
   ],
   "todays_tasks": {
-    "main_goal": "work kanban task t_1f63f7c9",
+    "main_goal": "Content Writer Agent для Kolodii Fitness SMM. Напиши ГОТОВИЙ",
     "additional_count": 4
   }
 }
