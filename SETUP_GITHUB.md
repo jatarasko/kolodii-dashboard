@@ -13,7 +13,7 @@
 ```bash
 cd ~/KolodiiOS/dashboard
 git init
-git remote add origin hhttps://github.com/jatarasko/kolodii-dashboard.git
+git remote add origin https://github.com/YOUR_USERNAME/kolodii-dashboard.git
 git add index.html data.json README.md .github/workflows/pages.yml generate_dashboard.py
 git commit -m "Initial dashboard"
 git branch -M main

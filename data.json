@@ -1,12 +1,12 @@
 {
-  "generated": "2026-06-21T21:36:06.929276",
+  "generated": "2026-06-24T22:58:24.364975",
   "stats": {
-    "total_projects": 9,
-    "active": 8,
+    "total_projects": 10,
+    "active": 9,
     "paused": 1,
     "completed": 0,
     "high_impact": 1,
-    "avg_progress": 42,
+    "avg_progress": 40,
     "active_jobs": 8,
     "total_jobs": 8
   },
@@ -15,8 +15,8 @@
       "name": "Online Fitness Support",
       "status": "active",
       "impact": "high",
-      "progress": 75,
-      "next_step": "Check-in Agent created — deploy and test with clients"
+      "progress": 85,
+      "next_step": "Operating System v3.0 created — full client journey logic documented"
     },
     {
       "name": "Kolodii OS Automation",
@@ -45,6 +45,13 @@
       "impact": "medium",
       "progress": 60,
       "next_step": "Launch next cohort or open evergreen enrollment"
+    },
+    {
+      "name": "Nutrition Course (new)",
+      "status": "active",
+      "impact": "medium",
+      "progress": 10,
+      "next_step": "Structure designed (52 days, 4 modules). Next: content writing for each day"
     },
     {
       "name": "Recipe Book",
@@ -81,7 +88,7 @@
       "state": "active",
       "name": "Відео-ідеї: Hermes Agent Use Cases",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-22T09:00:00+03:00",
+      "next_run": "2026-06-25T09:00:00+03:00",
       "deliver": "telegram"
     },
     {
@@ -89,7 +96,7 @@
       "state": "active",
       "name": "SMM: Research Agent",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-22T09:00:00+03:00",
+      "next_run": "2026-06-25T09:00:00+03:00",
       "deliver": "local"
     },
     {
@@ -97,7 +104,7 @@
       "state": "active",
       "name": "SMM: Strategy Agent",
       "schedule": "20 9 * * *",
-      "next_run": "2026-06-22T09:20:00+03:00",
+      "next_run": "2026-06-25T09:20:00+03:00",
       "deliver": "local"
     },
     {
@@ -105,7 +112,7 @@
       "state": "active",
       "name": "SMM: Writer Agent",
       "schedule": "40 9 * * *",
-      "next_run": "2026-06-22T09:40:00+03:00",
+      "next_run": "2026-06-25T09:40:00+03:00",
       "deliver": "local"
     },
     {
@@ -113,7 +120,7 @@
       "state": "active",
       "name": "SMM: Chief of Staff — Compile & Deliver",
       "schedule": "0 10 * * *",
-      "next_run": "2026-06-22T10:00:00+03:00",
+      "next_run": "2026-06-25T10:00:00+03:00",
       "deliver": "origin"
     },
     {
@@ -121,7 +128,7 @@
       "state": "active",
       "name": "Dashboard: Daily Update & Telegram",
       "schedule": "0 8 * * *",
-      "next_run": "2026-06-22T08:00:00+03:00",
+      "next_run": "2026-06-25T08:00:00+03:00",
       "deliver": "local"
     },
     {
@@ -129,7 +136,7 @@
       "state": "active",
       "name": "Щоденний пріоритет Тараса",
       "schedule": "0 9 * * *",
-      "next_run": "2026-06-22T09:00:00+03:00",
+      "next_run": "2026-06-25T09:00:00+03:00",
       "deliver": "origin"
     },
     {
@@ -137,12 +144,12 @@
       "state": "active",
       "name": "Sales Guide Daily Lesson",
       "schedule": "0 10 * * *",
-      "next_run": "2026-06-22T10:00:00+03:00",
+      "next_run": "2026-06-25T10:00:00+03:00",
       "deliver": "local"
     }
   ],
   "todays_tasks": {
-    "main_goal": "Content Writer Agent для Kolodii Fitness SMM. Напиши ГОТОВИЙ",
+    "main_goal": "Перед тим як продовжувати розробку всієї системи, виконай ау",
     "additional_count": 4
   }
 }
